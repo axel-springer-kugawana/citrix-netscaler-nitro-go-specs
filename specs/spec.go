@@ -76,7 +76,7 @@ func ReadSpec(folder string) (*Spec, error) {
 
 	spec := Spec{
 		Resources: resources,
-		Bindings: bindings,
+		Bindings:  bindings,
 	}
 
 	return &spec, nil

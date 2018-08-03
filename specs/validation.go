@@ -12,9 +12,9 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 		fieldType = strings.TrimSuffix(fieldType, "[]")
 	}
 
-	if fieldType == "ip" || fieldType == "ip_mask"  || fieldType == "int"  || fieldType == "string"  || fieldType == "bool"  || fieldType == "double" {
+	if fieldType == "ip" || fieldType == "ip_mask" || fieldType == "int" || fieldType == "string" || fieldType == "bool" || fieldType == "double" {
 		ok = true
-	} else if strings.HasPrefix(fieldType, "(") && strings.HasSuffix(fieldType, ")")  {
+	} else if strings.HasPrefix(fieldType, "(") && strings.HasSuffix(fieldType, ")") {
 		ok = true
 	} else if strings.Contains(fieldType, ".") {
 		parts := strings.Split(fieldType, ".")
@@ -22,7 +22,7 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 		if len(parts) == 2 {
 			target, found := resources[parts[0]]
 
-			if found && parts[1] != target.Key.Name && parts[1] != target.State  {
+			if found && parts[1] != target.Key.Name && parts[1] != target.State {
 				_, found = target.Fields[parts[1]]
 			}
 
