@@ -59,3 +59,13 @@ func GoType(fieldType string) string {
 
 	return base
 }
+
+func IsIn(value string, array []string) bool {
+	for _, item := range array {
+		if item == value {
+			return true
+		}
+	}
+
+	return false
+}
