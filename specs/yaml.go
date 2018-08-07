@@ -7,10 +7,11 @@ import (
 )
 
 type Resource struct {
-	Key    []string
-	State  string
-	Fields map[string]string
-	Update []string
+	Key        []string
+	State      string
+	Fields     map[string]string
+	Update     []string
+	Operations []string
 }
 
 type Binding struct {

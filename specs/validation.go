@@ -64,6 +64,22 @@ func validateResources(resources map[string]*Resource) error {
 				return fmt.Errorf("Invalid resource spec, invalid field type : %v.%v (%v)", key, field, fieldType)
 			}
 		}
+
+		for _, operation := range resource.Operations {
+			if operation == "rename" {
+				if len(resource.Key) != 1 {
+					return fmt.Errorf("Invalid resource spec, rename not supported when key is greater than one : %v", key)
+				}
+			} else if operation == "update" || operation == "unset" {
+				if len(resource.Update) < 1 {
+					return fmt.Errorf("Invalid resource spec, update/unset not supported when no fields are updatable : %v", key)
+				}
+			} else if operation == "enable" || operation == "disable" {
+				if resource.State == "" {
+					return fmt.Errorf("Invalid resource spec, enable/disable not supported when no state field is specified : %v", key)
+				}
+			}
+		}
 	}
 
 	return nil
