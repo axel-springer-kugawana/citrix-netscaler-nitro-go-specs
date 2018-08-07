@@ -22,7 +22,7 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 		if len(parts) == 2 {
 			target, found := resources[parts[0]]
 
-			if found && parts[1] != target.Key.Name && parts[1] != target.State {
+			if found && parts[1] != target.State {
 				_, found = target.Fields[parts[1]]
 			}
 
@@ -37,16 +37,14 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 
 func validateResources(resources map[string]*Resource) error {
 	for key, resource := range resources {
-		if resource.Key == nil || resource.Key.Name == "" {
+		if resource.Key == nil {
 			return fmt.Errorf("Invalid resource spec, no key name defined : %v", key)
 		}
 
-		if resource.Key.Fields != nil {
-			for _, field := range resource.Key.Fields {
-				_, ok := resource.Fields[field]
-				if !ok {
-					return fmt.Errorf("Invalid resource spec, key field unknown : %v.%v", key, field)
-				}
+		for _, field := range resource.Key {
+			_, ok := resource.Fields[field]
+			if !ok {
+				return fmt.Errorf("Invalid resource spec, key field unknown : %v.%v", key, field)
 			}
 		}
 

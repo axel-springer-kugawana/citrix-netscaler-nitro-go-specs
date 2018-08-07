@@ -7,15 +7,10 @@ import (
 )
 
 type Resource struct {
-	Key    *Key
+	Key    []string
 	State  string
 	Fields map[string]string
 	Update []string
-}
-
-type Key struct {
-	Name   string
-	Fields []string
 }
 
 type Binding struct {
