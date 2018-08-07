@@ -74,7 +74,7 @@ func validateResources(resources map[string]*Resource) error {
 				if len(resource.Update) < 1 {
 					return fmt.Errorf("Invalid resource spec, update/unset not supported when no fields are updatable : %v", key)
 				}
-			} else if operation == "enable" || operation == "disable" {
+			} else if operation == "enable" {
 				if resource.State == "" {
 					return fmt.Errorf("Invalid resource spec, enable/disable not supported when no state field is specified : %v", key)
 				}
