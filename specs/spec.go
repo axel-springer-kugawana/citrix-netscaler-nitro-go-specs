@@ -8,8 +8,8 @@ import (
 )
 
 type Spec struct {
-	Resources map[string]*Resource
-	Bindings  map[string]*Binding
+	Resources map[string]*SpecFile
+	Bindings  map[string]*SpecFile
 }
 
 func ReadSpec(folder string) (*Spec, error) {
@@ -32,13 +32,13 @@ func ReadSpec(folder string) (*Spec, error) {
 		return nil, err
 	}
 
-	resources := map[string]*Resource{}
+	resources := map[string]*SpecFile{}
 
 	for _, file := range resourceFiles {
 		fileName := filepath.Base(file.Name())
 		resourceName := strings.TrimSuffix(fileName, filepath.Ext(fileName))
 
-		resource, err := parseResource(filepath.Join(resourcesFolder, file.Name()))
+		resource, err := parseSpecFile(filepath.Join(resourcesFolder, file.Name()))
 
 		if err != nil {
 			log.Println("Failed to parse resource : ", err)
@@ -49,13 +49,13 @@ func ReadSpec(folder string) (*Spec, error) {
 		resources[resourceName] = resource
 	}
 
-	bindings := map[string]*Binding{}
+	bindings := map[string]*SpecFile{}
 
 	for _, file := range bindingFiles {
 		fileName := filepath.Base(file.Name())
 		bindingName := strings.TrimSuffix(fileName, filepath.Ext(fileName))
 
-		binding, err := parseBinding(filepath.Join(bindingsFolder, file.Name()))
+		binding, err := parseSpecFile(filepath.Join(bindingsFolder, file.Name()))
 
 		if err != nil {
 			log.Println("Failed to parse binding : ", err)

@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func validateFieldType(fieldType string, resources map[string]*Resource) bool {
+func validateFieldType(fieldType string, resources map[string]*SpecFile) bool {
 	ok := false
 
 	if strings.HasSuffix(fieldType, "[]") {
@@ -35,7 +35,7 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 	return ok
 }
 
-func validateResources(resources map[string]*Resource) error {
+func validateResources(resources map[string]*SpecFile) error {
 	for key, resource := range resources {
 		if resource.Scope == "" {
 			return fmt.Errorf("Invalid resource spec, no scope defined : %v", key)
@@ -85,7 +85,7 @@ func validateResources(resources map[string]*Resource) error {
 	return nil
 }
 
-func validateBindings(resources map[string]*Resource, bindings map[string]*Binding) error {
+func validateBindings(resources map[string]*SpecFile, bindings map[string]*SpecFile) error {
 	for key, binding := range bindings {
 		if binding.Scope == "" {
 			return fmt.Errorf("Invalid binding spec, no scope defined : %v", key)
@@ -122,7 +122,7 @@ func validateBindings(resources map[string]*Resource, bindings map[string]*Bindi
 	return nil
 }
 
-func validateSpec(resources map[string]*Resource, bindings map[string]*Binding) error {
+func validateSpec(resources map[string]*SpecFile, bindings map[string]*SpecFile) error {
 	err := validateResources(resources)
 
 	if err != nil {

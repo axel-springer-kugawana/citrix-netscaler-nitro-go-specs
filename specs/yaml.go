@@ -6,20 +6,12 @@ import (
 	"log"
 )
 
-type Common struct {
+type SpecFile struct {
 	Scope      string
 	Fields     map[string]string
 	Key        []string
 	Update     []string
 	Operations []string
-}
-
-type Resource struct {
-	Common
-}
-
-type Binding struct {
-	Common
 }
 
 func readFile(file string) ([]byte, error) {
@@ -32,42 +24,22 @@ func readFile(file string) ([]byte, error) {
 	return b, err
 }
 
-func parseResource(file string) (*Resource, error) {
+func parseSpecFile(file string) (*SpecFile, error) {
 	data, err := readFile(file)
 
 	if err != nil {
 		return nil, err
 	}
 
-	resource := &Resource{}
+	resource := &SpecFile{}
 
 	err = yaml.Unmarshal([]byte(data), &resource)
 
 	if err != nil {
-		log.Println("Failed to parse resource : ", err)
+		log.Println("Failed to parse specfile : ", err)
 
 		return nil, err
 	}
 
 	return resource, err
-}
-
-func parseBinding(file string) (*Binding, error) {
-	data, err := readFile(file)
-
-	if err != nil {
-		return nil, err
-	}
-
-	binding := &Binding{}
-
-	err = yaml.Unmarshal([]byte(data), &binding)
-
-	if err != nil {
-		log.Println("Failed to parse binding : ", err)
-
-		return nil, err
-	}
-
-	return binding, err
 }
