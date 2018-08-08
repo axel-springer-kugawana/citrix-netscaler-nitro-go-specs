@@ -6,17 +6,20 @@ import (
 	"log"
 )
 
-type Resource struct {
-	Key        []string
-	State      string
+type Common struct {
+	Scope      string
 	Fields     map[string]string
+	Key        []string
 	Update     []string
 	Operations []string
 }
 
+type Resource struct {
+	Common
+}
+
 type Binding struct {
-	Key    []string
-	Fields map[string]string
+	Common
 }
 
 func readFile(file string) ([]byte, error) {

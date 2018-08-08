@@ -22,7 +22,7 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 		if len(parts) == 2 {
 			target, found := resources[parts[0]]
 
-			if found && parts[1] != target.State {
+			if found {
 				_, found = target.Fields[parts[1]]
 			}
 
@@ -37,6 +37,10 @@ func validateFieldType(fieldType string, resources map[string]*Resource) bool {
 
 func validateResources(resources map[string]*Resource) error {
 	for key, resource := range resources {
+		if resource.Scope == "" {
+			return fmt.Errorf("Invalid resource spec, no scope defined : %v", key)
+		}
+
 		if resource.Key == nil {
 			return fmt.Errorf("Invalid resource spec, no key name defined : %v", key)
 		}
@@ -51,7 +55,7 @@ func validateResources(resources map[string]*Resource) error {
 		if resource.Update != nil {
 			for _, field := range resource.Update {
 				_, ok := resource.Fields[field]
-				if !ok && field != resource.State {
+				if !ok {
 					return fmt.Errorf("Invalid resource spec, update field unknown : %v.%v", key, field)
 				}
 			}
@@ -74,10 +78,6 @@ func validateResources(resources map[string]*Resource) error {
 				if len(resource.Update) < 1 {
 					return fmt.Errorf("Invalid resource spec, update/unset not supported when no fields are updatable : %v", key)
 				}
-			} else if operation == "enable" {
-				if resource.State == "" {
-					return fmt.Errorf("Invalid resource spec, enable/disable not supported when no state field is specified : %v", key)
-				}
 			}
 		}
 	}
@@ -87,8 +87,20 @@ func validateResources(resources map[string]*Resource) error {
 
 func validateBindings(resources map[string]*Resource, bindings map[string]*Binding) error {
 	for key, binding := range bindings {
+		if binding.Scope == "" {
+			return fmt.Errorf("Invalid binding spec, no scope defined : %v", key)
+		}
+
 		if binding.Key == nil {
 			return fmt.Errorf("Invalid binding spec, no key defined : %v", key)
+		}
+
+		if binding.Update != nil {
+			return fmt.Errorf("Invalid binding spec, update not supported : %v", key)
+		}
+
+		if binding.Operations != nil {
+			return fmt.Errorf("Invalid binding spec, operations not supported : %v", key)
 		}
 
 		for _, field := range binding.Key {
